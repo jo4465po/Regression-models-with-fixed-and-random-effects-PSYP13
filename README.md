@@ -282,11 +282,22 @@ home_sample_2 = read.csv("https://raw.githubusercontent.com/kekecsz/PSYP13_Data_
 # test the performance of backward regression model on the test set
 # NOTE that we did not re-fit the models on the test set, we use the models fitted
 # on the training set for the prediction
-pred_test <- predict(mod_pain3_cortisolsaliva_out, home_sample_2)
-pred_test_back <- predict(mod_back_pain_best, home_sample_2 )
 
-RSS_test = sum((home_sample_2["pain"] - pred_test)^2)
-RSS_test_back = sum((home_sample_2["pain"] - pred_test_back)^2)
+
+## Check data 
+who(TRUE)
+summary(home_sample_2)
+describe(home_sample_2)
+
+# Exclude ID = 26, 30, 43, 78, 93, 158 because of wrong value in mindfulness
+home_sample_2 -> home_sample_2_new
+home_sample_2_new=data_sample_2[!home_sample_2$mindfulness<=1,]
+
+pred_test <- predict(mod_pain3_cortisolsaliva_out, home_sample_2_new)
+pred_test_back <- predict(mod_back_pain_best, home_sample_2_new )
+
+RSS_test = sum((home_sample_2_new["pain"] - pred_test)^2)
+RSS_test_back = sum((home_sample_2_new["pain"] - pred_test_back)^2)
 RSS_test
 RSS_test_back
 
